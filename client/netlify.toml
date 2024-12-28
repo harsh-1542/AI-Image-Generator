@@ -1,9 +1,9 @@
 [build]
-  base = "client"       # Path to the folder containing your code (optional, if not in root)
-  command = "npm run build"  # Build command for your framework
-  publish = "client/build"   # Path to the output folder after build
+  base = "client"
+  command = "npm run build"
+  publish = "build"
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/index.js"
   status = 200
