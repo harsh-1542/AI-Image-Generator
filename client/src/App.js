@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import CreatePost from "./pages/CreatePost";
+import LoginPage from "./pages/LoginPage";
 
 const Container = styled.div`
   width: 100%;
@@ -35,6 +36,7 @@ function App() {
             <Routes>
               <Route path="/" exact element={<Home />} />
               <Route path="/post" exact element={<CreatePost />} />
+              <Route path="/Login" exact element={<LoginPage />} />
             </Routes>
           </BrowserRouter>
         </Wrapper>

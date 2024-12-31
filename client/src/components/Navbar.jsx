@@ -13,11 +13,22 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 50px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  padding: 0px 50px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+
   @media only screen and (max-width: 600px) {
-    padding: 10px 12px;
+    padding: 8px 12px; 
+    font-size: 10px;
+    // flex-direction: column;
+    gap: 10px;
   }
+`;
+
+const CenterSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 `;
 
 const Navbar = () => {
@@ -29,27 +40,67 @@ const Navbar = () => {
   const gotoCreatePost = () => {
     navigate("/post");
   };
-  const gottoHome = () => {
+
+  const gotoHome = () => {
     navigate("/");
   };
-  console.log(path);
+
+  const gotoLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <Container>
-      GemAI
-      {path[1] === "post" ? (
-        <Button
-          text="Explore Posts"
-          leftIcon={<WebRounded style={{ fontSize: "18px" }} />}
-          onClick={gottoHome}
-          type="secondary"
-        />
-      ) : (
-        <Button
-          text="Create new post"
-          leftIcon={<AddRounded style={{ fontSize: "18px" }} />}
-          onClick={gotoCreatePost}
-        />
-      )}
+      {/* Brand Logo */}
+      <img
+        src="brandLogo.gif"
+        alt="Logo"
+        style={{
+          height: "80px",
+          objectFit: "contain",
+          cursor: "pointer",
+          borderRadius: "50%",
+        }}
+        onClick={gotoHome}
+      />
+
+      {/* Brand Name */}
+      <h1
+        style={{
+          marginLeft: "15px", 
+        }}
+        onClick={gotoHome}
+      >
+        Gem AI
+      </h1>
+
+      {/* Center Section for Existing Button */}
+      <CenterSection>
+        {path[1] === "post" ? (
+          <Button
+            text="Explore Posts"
+            leftIcon={<WebRounded style={{ fontSize: "18px" }} />}
+            onClick={gotoHome}
+            type="secondary"
+          />
+        ) : (
+          <Button
+            text="Create New Post"
+            leftIcon={<AddRounded style={{ fontSize: "18px" }} />}
+            onClick={gotoCreatePost}
+          />
+        )}
+      </CenterSection>
+
+      {/* Login Button */}
+      <Button
+        text="Login"
+        onClick={gotoLogin}
+        type="primary"
+        style={{
+          marginLeft: "auto",
+        }}
+      />
     </Container>
   );
 };
