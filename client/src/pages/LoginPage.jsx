@@ -45,8 +45,7 @@ const BrandLogo = styled.img`
   border-radius: 15px;
 
   @media screen and (max-width: 768px) {
-    max-width: 60%;
-    max-height: 60%;
+    display: none;
   }
 `;
 
@@ -89,7 +88,7 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  width: 100%;
+  width: calc(100% - 1.6rem); /* Matches the button padding for consistent length */
   padding: 0.8rem;
   border: 1px solid ${({ theme }) => theme.text_secondary + "90"};
   border-radius: 5px;
