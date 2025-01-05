@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { darkTheme } from "../utils/Theme";
+import { AuthLogin, AuthRegister } from "../api";
 
 const LoginPageContainer = styled.div`
   display: flex;
@@ -129,9 +130,30 @@ const ToggleText = styled.p`
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
 
-  const toggleForm = () => {
-    setIsLogin(!isLogin);
+  const toggleForm = () => setIsLogin(!isLogin);
+
+  const handleChange = (e) => {
+    console.log({...formData, [e.target.id]: e.target.value });
+    
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let response;
+        if (isLogin) {
+            response = await AuthLogin(formData);
+        } else {
+            response = await AuthRegister(formData);
+        }
+      alert(response.data.message || "Success!");
+      
+    } catch (error) {
+      alert(error.response?.data?.message || "An error occurred");
+    }
   };
 
   return (
@@ -148,16 +170,17 @@ const LoginPage = () => {
         {/* Right Section for Login/Sign Up */}
         <RightSection theme={darkTheme}>
           <Title>{isLogin ? "Welcome Back!" : "Create Your Account"}</Title>
-          <Form  >
+          <Form   onSubmit={handleSubmit} >
             {!isLogin && (
               <FormGroup>
                 <Label theme={darkTheme} htmlFor="username">
-                  Username
+                Username
                 </Label>
                 <Input
                   theme={darkTheme}
                   type="text"
                   id="username"
+                  value={formData.username} onChange={handleChange} 
                   placeholder="Enter your username"
                 />
               </FormGroup>
@@ -170,6 +193,7 @@ const LoginPage = () => {
                 theme={darkTheme}
                 type="email"
                 id="email"
+                value={formData.email} onChange={handleChange} 
                 placeholder="Enter your email"
               />
             </FormGroup>
@@ -181,6 +205,7 @@ const LoginPage = () => {
                 theme={darkTheme}
                 type="password"
                 id="password"
+                value={formData.password} onChange={handleChange}
                 placeholder="Enter your password"
               />
             </FormGroup>

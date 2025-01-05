@@ -5,9 +5,9 @@ const User = require("../models/User");
 
 // Register a new user
 const RegisterUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
-  if (!name || !email || !password) {
+  if (!username || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -22,7 +22,7 @@ const RegisterUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = await User.create({
-    username: name,
+    username,
     email,
     password: hashedPassword,
   });

@@ -7,5 +7,7 @@ const API = axios.create({
 
 export const GetPosts = async () => await API.get("/post/");
 export const CreatePost = async (data) => await API.post("/post/create", data);
+export const AuthLogin = async (data) => await API.post("/login", data);
+export const AuthRegister = async (data) => await API.post("/register", data);
 export const GenerateImageFromPrompt = async (data) =>
   await API.post("/generateImage/", data);
