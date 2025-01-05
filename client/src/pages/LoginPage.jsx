@@ -148,7 +148,7 @@ const LoginPage = () => {
         {/* Right Section for Login/Sign Up */}
         <RightSection theme={darkTheme}>
           <Title>{isLogin ? "Welcome Back!" : "Create Your Account"}</Title>
-          <Form>
+          <Form  >
             {!isLogin && (
               <FormGroup>
                 <Label theme={darkTheme} htmlFor="username">

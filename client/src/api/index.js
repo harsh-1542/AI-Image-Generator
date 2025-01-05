@@ -2,7 +2,7 @@ import axios from "axios";
 
 // http://localhost:8080/api/
 const API = axios.create({
-  baseURL: "http://localhost:8080/api/",
+  baseURL: "https://8080-shreedattpa-aiimagegene-0vu8igimawn.ws-us117.gitpod.io/api/",
 });
 
 export const GetPosts = async () => await API.get("/post/");

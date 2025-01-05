@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import * as dotenv from 'dotenv'
 import express from 'express'
 import PostRouter from './routes/Posts.js';
+import UserRouter from './routes/User.js';
 import ganerateImageRouter from './routes/GenerateImage.js';
 
 // heeloo
@@ -25,6 +26,7 @@ app.use((err,req, res, next) =>{
 });
 
 app.use('/api/post',PostRouter);
+app.use('/api',UserRouter);
 app.use('/api/generateimage',ganerateImageRouter);
 
 
@@ -44,23 +46,15 @@ const connectDB = () =>{
     .catch((err) =>{
         console.error("failed to connect to DB");
         console.error(err);
-        
-        
     })
-    
 }
-
 
 const startServer = async () => {
     try {
-
         connectDB();
         app.listen(8080, () => console.log("server is listening on 8080"));
-
-        
     } catch (error) {
         console.log(error);
-        
     }
 }
  
