@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
-// const generateToken = require("../utils/generateToken");
+const generateToken = require("../utils/GenerateJWT");
 
 // Register a new user
 const RegisterUser = asyncHandler(async (req, res) => {
@@ -29,11 +29,7 @@ const RegisterUser = asyncHandler(async (req, res) => {
 
   if (user) {
     res.status(201).json({
-      _id: user._id,
-      name: user.username,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      // token: generateToken(user._id),
+      token: generateToken(user._id),
     });
   } else {
     res.status(500).json({ message: "Failed to create user" });
@@ -53,11 +49,8 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
   
     res.json({
-      _id: user._id,
-      name: user.username,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      // token: generateToken(user._id),
+      message: "Login successful",
+      token: generateToken(user._id),
     });
   } else {
     res.status(400).json({ message: "Invalid email or password" });

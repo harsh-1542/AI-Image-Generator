@@ -34,9 +34,10 @@ function App() {
           <BrowserRouter>
             <Navbar />
             <Routes>
-              <Route path="/" exact element={<Home />} />
-              <Route path="/post" exact element={<CreatePost />} />
-              <Route path="/Login" exact element={<LoginPage />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/post" element={<CreatePost />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/home" element={<Home />} />
             </Routes>
           </BrowserRouter>
         </Wrapper>

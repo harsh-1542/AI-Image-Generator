@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SearchBar from "../components/SearchBar";
 import ImageCard from "../components/cards/ImageCard";
@@ -67,6 +68,7 @@ const Home = () => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filteredPost, setFilteredPost] = useState([]);
+  const navigate = useNavigate();
 
   const getPosts = async () => {
     setLoading(true);
@@ -81,6 +83,17 @@ const Home = () => {
         setLoading(false);
       });
   };
+
+  
+  useEffect(() => {
+    const userinfo = localStorage.getItem("userInfo");
+
+    // console.log(userinfo);
+    
+    if (!userinfo){
+      navigate('/login');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     getPosts();

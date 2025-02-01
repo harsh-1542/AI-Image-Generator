@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import { darkTheme } from "../utils/Theme";
 import { AuthLogin, AuthRegister } from "../api";
@@ -131,14 +133,28 @@ const ToggleText = styled.p`
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
+  const navigate = useNavigate(); 
 
   const toggleForm = () => setIsLogin(!isLogin);
 
   const handleChange = (e) => {
-    console.log({...formData, [e.target.id]: e.target.value });
+    // console.log({...formData, [e.target.id]: e.target.value });
     
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
+  
+  useEffect(() => {
+    const userinfo = localStorage.getItem("userInfo");
+
+    console.log(userinfo);
+    
+    
+    if (userinfo){
+      navigate('/');
+    }
+  }, [navigate]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -149,8 +165,15 @@ const LoginPage = () => {
         } else {
             response = await AuthRegister(formData);
         }
-      alert(response.data.message || "Success!");
-      
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
+
+        if (response.data) { // Assuming the API response includes a 'success' field
+          // alert(response.data.message || "Success!");
+          navigate("/"); // Navigate to the home page
+        } else {
+          alert(response.data.message || "Something went wrong");
+        }
+
     } catch (error) {
       alert(error.response?.data?.message || "An error occurred");
     }
