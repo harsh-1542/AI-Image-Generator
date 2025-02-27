@@ -10,7 +10,7 @@ const LoginPageContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: ${({ theme }) => theme.bg};
+  // background-color: ${({ theme }) => theme.bg};
   color: ${({ theme }) => theme.text_primary};
 `;
 
@@ -145,7 +145,7 @@ const LoginPage = () => {
 
   
   useEffect(() => {
-    const userinfo = localStorage.getItem("userInfo");
+    const userinfo = localStorage.getItem("token");
 
     console.log(userinfo);
     
@@ -165,9 +165,10 @@ const LoginPage = () => {
         } else {
             response = await AuthRegister(formData);
         }
-        localStorage.setItem("userInfo", JSON.stringify(response.data));
+        localStorage.setItem("token", response.data?.token);
+console.log(response);
 
-        if (response.data) { // Assuming the API response includes a 'success' field
+        if (response.status === 200) { // Assuming the API response includes a 'success' field
           // alert(response.data.message || "Success!");
           navigate("/"); // Navigate to the home page
         } else {

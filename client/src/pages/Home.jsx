@@ -72,6 +72,9 @@ const Home = () => {
 
   const getPosts = async () => {
     setLoading(true);
+    // const token = localStorage.getItem("token");
+    // console.log(typeof token, token);
+    
     await GetPosts()
       .then((res) => {
         setPosts(res?.data?.data);
@@ -86,11 +89,11 @@ const Home = () => {
 
   
   useEffect(() => {
-    const userinfo = localStorage.getItem("userInfo");
+    const token = localStorage.getItem("token");
 
     // console.log(userinfo);
     
-    if (!userinfo){
+    if (!token){
       navigate('/login');
     }
   }, [navigate]);

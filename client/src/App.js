@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import CreatePost from "./pages/CreatePost";
 import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const Container = styled.div`
   width: 100%;
@@ -38,6 +39,7 @@ function App() {
               <Route path="/post" element={<CreatePost />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/home" element={<Home />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Routes>
           </BrowserRouter>
         </Wrapper>

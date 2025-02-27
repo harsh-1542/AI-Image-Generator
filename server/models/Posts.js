@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
 const PostSchema = mongoose.Schema({
-    name: {
-        type: String,
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId, // Store the User's ID
+        ref: "User", // Reference the 'User' model
         required: true
     },
     prompt: {

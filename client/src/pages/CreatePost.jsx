@@ -33,7 +33,7 @@ const CreatePost = () => {
   const [generateImageLoading, setGenerateImageLoading] = useState(false);
   const [createPostLoading, setcreatePostLoading] = useState(false);
   const [post, setPost] = useState({
-    name: "",
+    
     prompt: "",
     photo: "",
   });

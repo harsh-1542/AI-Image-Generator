@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "./buttons/button";
-import { useLocation, useNavigate } from "react-router";
+import {  useNavigate } from "react-router";
 import { AddRounded, AccountCircleRounded } from "@mui/icons-material";
 
 const Container = styled.div`
@@ -53,10 +53,10 @@ const RightSection = styled.div`
 `;
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   // Example state to track login
-  const isLoggedIn = localStorage.getItem("userInfo") !== null;
+  const isLoggedIn = localStorage.getItem("token") !== null;
 
   const gotoCreatePost = () => {
     navigate("/post");
@@ -76,8 +76,8 @@ const Navbar = () => {
 
   const logout = () => {
     // Clear localStorage or any other session storage
-    localStorage.removeItem("userInfo");
-    navigate("/login"); // Redirect to login page after logout
+    localStorage.removeItem("token");
+    // navigate("/login"); // Redirect to login page after logout
   };
 
   return (

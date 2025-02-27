@@ -5,6 +5,7 @@ import express from 'express'
 import PostRouter from './routes/Posts.js';
 import UserRouter from './routes/User.js';
 import ganerateImageRouter from './routes/GenerateImage.js';
+import { authMiddleware } from './middleware/auth.js';
 
 // heeloo
 dotenv.config();
@@ -25,12 +26,21 @@ app.use((err,req, res, next) =>{
         message});
 });
 
+app.use("/api",authMiddleware);
+
 app.use('/api/post',PostRouter);
-app.use('/api',UserRouter);
+app.use('/', UserRouter);
 app.use('/api/generateimage',ganerateImageRouter);
 
 
-app.get('/', (req, res) => {
+app.get('/api/home',(req, res) => {
+    res.status(200).json({
+        message : "hello this is AI image generation "
+    })
+
+});
+
+app.get('/home',(req, res) => {
     res.status(200).json({
         message : "hello this is AI image generation "
     })
@@ -45,7 +55,7 @@ const connectDB = () =>{
     .then(()=> console.log("MongoDB Connected"))
     .catch((err) =>{
         console.error("failed to connect to DB");
-        console.error(err);
+        // console.error(err);
     })
 }
 
@@ -54,7 +64,7 @@ const startServer = async () => {
         connectDB();
         app.listen(8080, () => console.log("server is listening on 8080"));
     } catch (error) {
-        console.log(error);
+        console.log("internal server error at server starting ");
     }
 }
  
