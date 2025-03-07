@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import Button from "./buttons/button";
 import {  useNavigate } from "react-router";
-import { AddRounded, AccountCircleRounded } from "@mui/icons-material";
+
+
+import { AddRounded,WebRounded, AccountCircleRounded } from "@mui/icons-material";
 
 const Container = styled.div`
   flex: 1;
@@ -106,6 +108,7 @@ const Navbar = () => {
             />
             <Button
               text="Logout"
+              leftIcon={<WebRounded style={{ fontSize: "18px" }} />}
               onClick={logout}
               type="secondary"
             />
@@ -114,6 +117,7 @@ const Navbar = () => {
         {!isLoggedIn && (
           <Button
             text="Login"
+            leftIcon={<WebRounded style={{ fontSize: "18px" }} />}
             onClick={gotoLogin}
             type="primary"
           />
