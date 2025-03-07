@@ -37,12 +37,18 @@ app.get('/api/home',(req, res) => {
     res.status(200).json({
         message : "hello this is AI image generation "
     })
-
 });
 
 app.get('/home',(req, res) => {
     res.status(200).json({
         message : "hello this is AI image generation "
+    })
+
+});
+
+app.get('/api/userauth',(req, res) => {
+    res.status(200).json({
+        message : "hello this is auth image generation "
     })
 
 });

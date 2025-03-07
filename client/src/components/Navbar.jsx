@@ -77,7 +77,7 @@ const Navbar = () => {
   const logout = () => {
     // Clear localStorage or any other session storage
     localStorage.removeItem("token");
-    // navigate("/login"); // Redirect to login page after logout
+    navigate("/login"); // Redirect to login page after logout
   };
 
   return (

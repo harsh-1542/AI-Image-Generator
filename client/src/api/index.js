@@ -21,7 +21,7 @@ export const PrivateAPI = axios.create({
 PrivateAPI.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    console.log(typeof token, token);
+    // console.log(typeof token, token);
     
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -32,9 +32,10 @@ PrivateAPI.interceptors.request.use(
 );
 
 
-export const GetPosts = async () => await PrivateAPI.get("api/post");
+export const GetPosts = async () => await PrivateAPI.get("/post");
 
 export const CreatePost = async (data) => await PrivateAPI.post("api/post/create", data);
+export const UserAuth = async (data) => await PrivateAPI.post("api/userauth", data);
 
 export const AuthLogin = async (data) => await PublicAPI.post("login", data);
 

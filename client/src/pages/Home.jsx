@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
+
 import styled from "styled-components";
 import SearchBar from "../components/SearchBar";
 import ImageCard from "../components/cards/ImageCard";
-import { GetPosts } from "../api";
+import { GetPosts } from "../api/index";
 import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`
   padding: 30px 30px;
   padding-bottom: 200px;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto; /* Fix: Allow scrolling */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+
   @media (max-width: 768px) {
     padding: 6px 10px;
   }
+
   background: ${({ theme }) => theme.background};
 `;
 
@@ -68,52 +72,46 @@ const Home = () => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filteredPost, setFilteredPost] = useState([]);
+  const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Redirect if user is not logged in
+ 
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   }
+  // }, [user, navigate]);
+
+
+  // Fetch posts from API
   const getPosts = async () => {
-    setLoading(true);
-    // const token = localStorage.getItem("token");
-    // console.log(typeof token, token);
-    
-    await GetPosts()
-      .then((res) => {
-        setPosts(res?.data?.data);
-        setFilteredPost(res?.data?.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error?.response?.data?.message);
-        setLoading(false);
-      });
-  };
-
-  
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    // console.log(userinfo);
-    
-    if (!token){
-      navigate('/login');
+    try {
+      setLoading(true);
+      const res = await GetPosts();
+      setPosts(res?.data?.data || []);
+      setFilteredPost(res?.data?.data || []);
+    } catch (error) {
+      setError(error?.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
-  }, [navigate]);
+  };
 
   useEffect(() => {
     getPosts();
   }, []);
 
+  // Filter posts based on search input
   useEffect(() => {
     if (!search) {
       setFilteredPost(posts);
-    }
-    const filteredPosts = posts.filter((post) => {
-      const promptMatch = post?.prompt?.toLowerCase().includes(search);
-      const authorMatch = post?.author?.toLowerCase().includes(search);
-
-      return promptMatch || authorMatch;
-    });
-
-    if (search) {
+    } else {
+      const filteredPosts = posts.filter((post) => {
+        const promptMatch = post?.prompt?.toLowerCase().includes(search.toLowerCase());
+        const authorMatch = (post?.author?.toLowerCase() || "").includes(search.toLowerCase());
+        return promptMatch || authorMatch;
+      });
       setFilteredPost(filteredPosts);
     }
   }, [posts, search]);
@@ -124,10 +122,7 @@ const Home = () => {
         Explore popular posts in the Community!
         <Span>⦾ Generated with AI ⦾</Span>
       </HeadLine>
-      <SearchBar
-        search={search}
-        handleChange={(e) => setSearch(e.target.value)}
-      />
+      <SearchBar search={search} handleChange={(e) => setSearch(e.target.value)} />
       <Wrapper>
         {error && <div style={{ color: "red" }}>{error}</div>}
         {loading ? (
@@ -135,14 +130,7 @@ const Home = () => {
         ) : (
           <CardWrapper>
             {filteredPost.length > 0 ? (
-              <>
-                {filteredPost
-                  .slice()
-                  .reverse()
-                  .map((item, index) => (
-                    <ImageCard key={index} item={item} />
-                  ))}
-              </>
+              filteredPost.reverse().map((item, index) => <ImageCard key={index} item={item} />)
             ) : (
               <>No Posts Found !!</>
             )}

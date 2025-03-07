@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import styled from "styled-components";
 import { darkTheme } from "../utils/Theme";
 import { AuthLogin, AuthRegister } from "../api";
@@ -10,7 +9,6 @@ const LoginPageContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  // background-color: ${({ theme }) => theme.bg};
   color: ${({ theme }) => theme.text_primary};
 `;
 
@@ -91,7 +89,7 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  width: calc(100% - 1.6rem); /* Matches the button padding for consistent length */
+  width: calc(100% - 1.6rem);
   padding: 0.8rem;
   border: 1px solid ${({ theme }) => theme.text_secondary + "90"};
   border-radius: 5px;
@@ -132,51 +130,56 @@ const ToggleText = styled.p`
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
-  const navigate = useNavigate(); 
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
-  const toggleForm = () => setIsLogin(!isLogin);
-
-  const handleChange = (e) => {
-    // console.log({...formData, [e.target.id]: e.target.value });
-    
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
-
-  
+  // Redirect logged-in users
   useEffect(() => {
-    const userinfo = localStorage.getItem("token");
-
-    console.log(userinfo);
-    
-    
-    if (userinfo){
-      navigate('/');
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
     }
   }, [navigate]);
 
+  // Toggle between Login and Sign Up
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+    setErrorMessage(""); // Clear errors when switching
+  };
 
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       let response;
-        if (isLogin) {
-            response = await AuthLogin(formData);
-        } else {
-            response = await AuthRegister(formData);
-        }
-        localStorage.setItem("token", response.data?.token);
-console.log(response);
+      if (isLogin) {
+        response = await AuthLogin(formData);
+      } else {
+        response = await AuthRegister(formData);
+      }
 
-        if (response.status === 200) { // Assuming the API response includes a 'success' field
-          // alert(response.data.message || "Success!");
-          navigate("/"); // Navigate to the home page
+      if (response.status >= 200 && response.status < 300) {
+        if (response.data?.token) {
+          localStorage.setItem("token", response.data.token);
+          navigate("/"); // Redirect on success
         } else {
-          alert(response.data.message || "Something went wrong");
+          setErrorMessage("No token received. Please try again.");
         }
-
+      } else {
+        setErrorMessage(response.data.message || "Something went wrong at login page backend");
+      }
     } catch (error) {
-      alert(error.response?.data?.message || "An error occurred");
+      setErrorMessage(error.response?.data?.message || "An error occurred");
     }
   };
 
@@ -194,18 +197,21 @@ console.log(response);
         {/* Right Section for Login/Sign Up */}
         <RightSection theme={darkTheme}>
           <Title>{isLogin ? "Welcome Back!" : "Create Your Account"}</Title>
-          <Form   onSubmit={handleSubmit} >
+          {errorMessage && <p style={{ color: "red", textAlign: "center" }}>{errorMessage}</p>}
+          <Form onSubmit={handleSubmit}>
             {!isLogin && (
               <FormGroup>
                 <Label theme={darkTheme} htmlFor="username">
-                Username
+                  Username
                 </Label>
                 <Input
                   theme={darkTheme}
                   type="text"
                   id="username"
-                  value={formData.username} onChange={handleChange} 
+                  value={formData.username}
+                  onChange={handleChange}
                   placeholder="Enter your username"
+                  required
                 />
               </FormGroup>
             )}
@@ -217,8 +223,10 @@ console.log(response);
                 theme={darkTheme}
                 type="email"
                 id="email"
-                value={formData.email} onChange={handleChange} 
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Enter your email"
+                required
               />
             </FormGroup>
             <FormGroup>
@@ -229,8 +237,10 @@ console.log(response);
                 theme={darkTheme}
                 type="password"
                 id="password"
-                value={formData.password} onChange={handleChange}
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Enter your password"
+                required
               />
             </FormGroup>
             <Button theme={darkTheme} type="submit">
@@ -238,9 +248,7 @@ console.log(response);
             </Button>
           </Form>
           <ToggleText theme={darkTheme} onClick={toggleForm}>
-            {isLogin
-              ? "Don't have an account? Sign Up"
-              : "Already have an account? Login"}
+            {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
           </ToggleText>
         </RightSection>
       </LoginBox>

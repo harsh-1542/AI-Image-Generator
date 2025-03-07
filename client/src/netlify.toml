@@ -1,0 +1,9 @@
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.js"
+  status = 200

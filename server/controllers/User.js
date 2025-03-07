@@ -48,13 +48,13 @@ export const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
+    res.status(200).json({
       status: "success",
       message: "Login Successful",
       token: generateToken(user._id),
     });
   } else {
-    res.status(400).json({status: "failed", message: "Invalid email or password" });
+    res.status(400).json({status: "failed", message: "Invalid email sdfjnfiueufebwi or password" });
   }
 });
 

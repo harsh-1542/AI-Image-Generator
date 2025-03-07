@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 export const authMiddleware = (req, res, next) => {
   let token = req.header("Authorization"); // Get token from headers
 
-  console.log("Received Token:", token);
+  // console.log(" message from auth : Received Token:", token);
 
   if (!token) {
     return res.status(401).json({ message: "Access Denied" });
@@ -18,7 +18,7 @@ export const authMiddleware = (req, res, next) => {
       // token = token.slice(7).trim(); // Remove "Bearer " (7 characters)
     }
 
-    console.log("Token after removing 'Bearer ':", token);
+    // console.log("Token after removing 'Bearer ':", token);
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Decoded values from token:", decoded);
