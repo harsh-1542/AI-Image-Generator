@@ -30,8 +30,8 @@ app.use("/api",authMiddleware);
 
 app.use('/api/post',PostRouter);
 app.use('/', UserRouter);
+app.use('/post/', PostRouter);
 app.use('/api/generateimage',ganerateImageRouter);
-
 
 app.get('/api/home',(req, res) => {
     res.status(200).json({
