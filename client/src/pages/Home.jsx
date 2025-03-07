@@ -132,7 +132,9 @@ const Home = () => {
             {filteredPost.length > 0 ? (
               filteredPost.reverse().map((item, index) => <ImageCard key={index} item={item} />)
             ) : (
-              <>No Posts Found !!</>
+              <div style={{ textAlign: "center", width: "100%" }}> {/* ✅ Center & Add New Line */}
+              <p>No Posts Found !!</p>
+            </div>
             )}
           </CardWrapper>
         )}

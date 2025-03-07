@@ -2,8 +2,13 @@ import axios from "axios";
 
 
 // const weburl = "https://8080-shreedattpa-aiimagegene-0vu8igimawn.ws-us117.gitpod.io/api/";
+<<<<<<< HEAD
 // const localurl= "http://localhost:8080/"
 const WebUrl= "https://ai-image-generator-ey71.onrender.com"
+=======
+const localurl= "http://localhost:8080/"
+const WebUrl= "https://ai-image-generator-ey71.onrender.com/"
+>>>>>>> f7c4b15 (updating ui)
 // http://localhost:8080/api/
 
 // Public API (No token)
@@ -33,7 +38,7 @@ PrivateAPI.interceptors.request.use(
 );
 
 
-export const GetPosts = async () => await PrivateAPI.get("/post");
+export const GetPosts = async () => await PrivateAPI.get("post");
 
 export const CreatePost = async (data) => await PrivateAPI.post("api/post/create", data);
 export const UserAuth = async (data) => await PrivateAPI.post("api/userauth", data);
