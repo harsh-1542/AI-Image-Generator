@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { darkTheme } from "../utils/Theme";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Import jwtDecode
-import axios from "axios";
+// import { jwtDecode } from "jwt-decode"; // Import jwtDecode
+// import axios from "axios";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -70,7 +70,7 @@ const LogoutButton = styled.button`
 `;
 
 const ProfilePage = () => {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -79,11 +79,12 @@ const ProfilePage = () => {
     if (!token) {
       navigate("/login");
       return;
+
     }
 
     try {
-      const decoded = jwtDecode(token); // Decode JWT to get UID
-      const userId = decoded.uid;
+      // const decoded = jwtDecode(token); // Decode JWT to get UID
+      // const userId = decoded.uid;
 
       // const fetchUserData = async () => {
       //   try {
@@ -111,8 +112,8 @@ const ProfilePage = () => {
     <ProfileContainer theme={darkTheme}>
       <ProfileBox theme={darkTheme}>
         <Avatar src="https://www.pngarts.com/files/5/User-Avatar-PNG-Transparent-Image.png" alt="User Avatar" />
-        {user ? (
-          <>
+        {/* {user ? ( */}
+          // <>
             <UserName>
               {/* {user.username} */}
               harsh</UserName>
@@ -120,9 +121,9 @@ const ProfilePage = () => {
               {/* {user.email} */}
               harsh</UserEmail>
           </>
-        ) : (
-          <p>Loading...</p>
-        )}
+        {/* ) : ( */}
+          {/* <p>Loading...</p> */}
+        {/* )} */}
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       </ProfileBox>
     </ProfileContainer>
