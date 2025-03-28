@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
+// import { useNavigate } from "react-router-dom";
+// import { useAuth } from "../context/AuthProvider";
 
 import styled from "styled-components";
 import SearchBar from "../components/SearchBar";
@@ -72,8 +72,8 @@ const Home = () => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filteredPost, setFilteredPost] = useState([]);
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  // const { user } = useAuth();
+  // const navigate = useNavigate();
 
   // Redirect if user is not logged in
  
