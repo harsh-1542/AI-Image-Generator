@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
       console.error("❌ Invalid token:", error);
       handleLogout();
     }
-  }, []); // ✅ Runs only once on mount
+  }, [handleLogout]); // ✅ Runs only once on mount
 
   return <AuthContext.Provider value={{ user, handleLogout ,fetchUserData }}>{children}</AuthContext.Provider>;
 };
