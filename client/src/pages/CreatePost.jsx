@@ -28,27 +28,38 @@ const Wrapper = styled.div`
     flex-direction: column;
   }
 `;
+// const ErrorMessage = styled.p`
+//   color: red;
+//   font-size: 14px;
+//   font-weight: bold;
+//   text-align: center;
+//   margin-bottom: 10px;
+// `;
 
 const CreatePost = () => {
   const [generateImageLoading, setGenerateImageLoading] = useState(false);
   const [createPostLoading, setcreatePostLoading] = useState(false);
+  const [error, setError] = useState("");
   const [post, setPost] = useState({
-    
     prompt: "",
     photo: "",
   });
   return (
     <Container>
       <Wrapper>
+         {/* ✅ Show error above GenerateImage */}
+         {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
         <GenerateImage
-          createPostLoading={createPostLoading}
-          setcreatePostLoading={setcreatePostLoading}
-          generateImageLoading={generateImageLoading}
-          setGenerateImageLoading={setGenerateImageLoading}
-          post={post}
-          setPost={setPost}
-        />
-        <GeneratedImageCard loading={generateImageLoading} src={post.photo} />
+            createPostLoading={createPostLoading}
+            setcreatePostLoading={setcreatePostLoading}
+            generateImageLoading={generateImageLoading}
+            setGenerateImageLoading={setGenerateImageLoading}
+            post={post}
+            error={error}
+            setPost={setPost}
+            setError={setError}
+          />
+        <GeneratedImageCard loading={generateImageLoading} src={post.photo} error={error}  />
       </Wrapper>
     </Container>
   );

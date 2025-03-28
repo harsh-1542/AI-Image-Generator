@@ -5,6 +5,7 @@ import { AutoAwesome, CreateRounded } from "@mui/icons-material";
 import TextInput from "../Input/TextInput";
 import Button from "../buttons/button";
 import { CreatePost, GenerateImageFromPrompt } from "../../api";
+import UserInfo from "./UserInfo";
 
 const Form = styled.div`
   flex: 1;
@@ -54,27 +55,40 @@ const GenerateImage = ({
   generateImageLoading,
   setGenerateImageLoading,
   post,
+  setError,
   setPost,
 }) => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  
 
   const generateImage = async () => {
     setGenerateImageLoading(true);
     setError("");
-    await GenerateImageFromPrompt({ prompt: post.prompt })
-      .then((res) => {
-        setPost({
+    try {
+      const result = await GenerateImageFromPrompt({ prompt: post.prompt });
+      setPost({
           ...post,
-          photo: `${res?.data?.photo}`,
-        });
-        setGenerateImageLoading(false);
-      })
-      .catch((error) => {
-        setError(error?.response?.data?.message);
-        setGenerateImageLoading(false);
+          photo: result?.data?.photo || "",
       });
+  } catch (error) {
+      console.error("Axios Error:", error.response);
+      console.error("Axios Error data:", error.response.data);
+
+      let errorMessage = "Something went wrong.";
+
+      // If error response exists (e.g., 403 Forbidden)
+      if (error.response) {
+          errorMessage = error.response.data?.message || `Error ${error.response.status}: ${error.response.statusText}`;
+      } else if (error.message) {
+          errorMessage = error.message; // Generic error message
+      }
+
+      setError(errorMessage); // Ensure only a string is set
+  } finally {
+      setGenerateImageLoading(false);
+  }
   };
+
   const createPost = async () => {
     setcreatePostLoading(true);
     setError("");
@@ -98,13 +112,14 @@ const GenerateImage = ({
         </Desc>
       </Top>
       <Body>
-        <TextInput
+        {/* <TextInput
           label="Author"
           placeholder="Enter your name"
           name="name"
           value={post.name}
           handelChange={(e) => setPost({ ...post, name: e.target.value })}
-        />
+        /> */}
+        <UserInfo  name={"harsh"}></UserInfo>
         <TextInput
           label="Image Prompt"
           placeholder="Write a detailed prompt about the image"
@@ -114,7 +129,8 @@ const GenerateImage = ({
           value={post.prompt}
           handelChange={(e) => setPost({ ...post, prompt: e.target.value })}
         />
-        {error && <div style={{ color: "red" }}>{error}</div>}* You can post the
+        {/* {error && <div style={{ color: "red" }}>{error}</div>} */}
+        * You can post the
         AI Generated Image to showcase in the community!
       </Body>
       <Actions>

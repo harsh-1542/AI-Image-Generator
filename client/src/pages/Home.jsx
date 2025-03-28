@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useAuth } from "../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 import styled from "styled-components";
 import SearchBar from "../components/SearchBar";
@@ -72,14 +72,18 @@ const Home = () => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filteredPost, setFilteredPost] = useState([]);
-  // const { user } = useAuth();
-  // const navigate = useNavigate();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   // Redirect if user is not logged in
  
   // useEffect(() => {
+  //   // console.log(user, ": auth user at home");
+    
   //   if (!user) {
   //     navigate("/login");
+  //   }else{
+  //     getPosts();
   //   }
   // }, [user, navigate]);
 
@@ -89,6 +93,8 @@ const Home = () => {
     try {
       setLoading(true);
       const res = await GetPosts();
+      // console.log(res);
+      
       setPosts(res?.data?.data || []);
       setFilteredPost(res?.data?.data || []);
     } catch (error) {
@@ -130,7 +136,7 @@ const Home = () => {
         ) : (
           <CardWrapper>
             {filteredPost.length > 0 ? (
-              filteredPost.reverse().map((item, index) => <ImageCard key={index} item={item} />)
+              filteredPost.map((item, index) => <ImageCard key={index} item={item} />).reverse()
             ) : (
               <div style={{ textAlign: "center", width: "100%" }}> {/* ✅ Center & Add New Line */}
               <p>No Posts Found !!</p>

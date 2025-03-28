@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import mongoose from "mongoose"; 
 import generateToken from "../utils/GenerateJWT.js";
 
 export const RegisterUser = asyncHandler(async (req, res) => {
@@ -57,6 +58,37 @@ export const authUser = asyncHandler(async (req, res) => {
     res.status(400).json({status: "failed", message: "Invalid email sdfjnfiueufebwi or password" });
   }
 });
+
+
+
+
+
+// ✅ Controller to get user details by user ID
+export const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id; // Extract user ID from request params
+
+  
+    // ✅ Validate if ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID format" });
+    }else{
+
+      const user = await User.findById(userId).select("username email"); // Exclude password
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }else{
+
+        res.status(200).json(user);
+      }
+    }
+
+
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
 
 
 

@@ -33,24 +33,39 @@ export const generateImages = async (req, res, next) => {
           throw createError(500, "Failed to generate image.");
       }
 
+      
+      console.log(result);
+      
       return res.status(200).json({
           photo: result.data.images[0].url,
           metadata: { prompt, size: "1024x1024" },
-      });
+        });
+        
+    } catch (error) {
+        
+        // console.log(error);
+        // console.log("gappppp");
+        
+    
+    // console.error("Fal AI API Error:", error.message);
 
-  } catch (error) {
-      console.error("Fal AI API Error:", error.message);
+    // Handle specific API errors
+    // Handle specific API errors dynamically
+    // if (error.status >400 && error.body?.detail) {
+    //     return next(createError(error.status, error.message, error.body.detail)); // Use API response message
+    // }
 
-      // Handle specific API errors
-      if (error.status === 403 && error.body?.detail?.includes("Exhausted balance")) {
-          return next(createError(403, "API balance exhausted. Please top up at fal.ai/dashboard/billing."));
-      }
-
-      return next(createError(
-          error.status || 500,
-          error.body?.detail || "An unexpected error occurred.",
-          error.message
-      ));
+    
+    res.status(error.status || 500).json({
+        success: false,
+        error: error,
+        message: error.body.detail || "Something went wrong",
+    });
+    return next(createError(
+        error.status || 500,
+        error.body?.detail || "An unexpected error occurred.",
+        error.message
+    ));
   }
 };
 

@@ -179,6 +179,8 @@ const LoginPage = () => {
         setErrorMessage(response.data.message || "Something went wrong at login page backend");
       }
     } catch (error) {
+      console.log(error);
+      
       setErrorMessage(error.response?.data?.message || "An error occurred");
     }
   };

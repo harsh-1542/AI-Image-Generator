@@ -9,33 +9,49 @@ const Container = styled.div`
   color: ${({ theme }) => theme.arrow + 80};
   border-radius: 20px;
   display: flex;
+  flex-direction: column; /* ✅ Ensure text & image align properly */
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 10px;
+  text-align: center;
+  min-height: 250px;
+  max-width: 100%; /* ✅ Ensures responsiveness */
 `;
 
 const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  background: ${({ theme }) => theme.black + 50};
+  max-width: 100%; /* ✅ Prevents overflow */
+  max-height: 100%; /* ✅ Ensures it fits properly */
   border-radius: 18px;
   object-fit: cover;
 `;
 
-const GeneratedImageCard = ({ src, loading }) => {
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  background: rgba(255, 0, 0, 0.1);
+  border-radius: 8px;
+`;
+
+const GeneratedImageCard = ({ src, loading, error }) => {
+// console.log(error);
+
+  
   return (
     <Container>
       {loading ? (
         <>
-          <CircularProgress
-            sx={{ color: "inherit", width: "24px", height: "24px" }}
-          />
-          Generating Your Image . . .
+          <CircularProgress sx={{ color: "inherit", width: "24px", height: "24px" }} />
+          <p>Generating Your Image . . .</p>
         </>
+      ) : error ? (
+        <ErrorMessage>❌ {error}</ErrorMessage> // ✅ Better UI for errors
       ) : src ? (
-        <Image src={src} />
+        <Image src={src} alt="Generated AI Image" />
       ) : (
-        <>Write a prompt to generate image</>
+        <p>Write a prompt to generate an image</p>
       )}
     </Container>
   );

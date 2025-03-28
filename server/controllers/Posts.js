@@ -1,4 +1,5 @@
 import Post from "../models/Posts.js";
+import User from "../models/User.js";
 import * as dotenv from "dotenv";
 
 import { createError } from "../error.js";
@@ -16,7 +17,9 @@ cloudinary.config({
 
 export const getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({});
+    const posts = await Post.find({})
+    .populate("createdBy", "username") // ✅ Fetch only `username` from `User`
+    .exec();
     return res.status(200).json({
       success: true,
       data: posts,
@@ -39,9 +42,11 @@ export const createPost = async (req, res, next) => {
 
 
 
-        // const photoUrl = await cloudinary.uploader.upload(photo);
+        const photoUrl = await cloudinary.uploader.upload(photo);
         const newPost = await Post.create({
-          createdBy: req.user.uid,prompt,photo: photo
+          createdBy: req.user.uid,
+          prompt,
+          photo: photoUrl?.secure_url
           // createdBy: req.user._id,prompt,photo: photoUrl?.secure_url
         })
 

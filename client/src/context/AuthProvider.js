@@ -1,46 +1,67 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Ensure correct import
+// import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { authUserInfo } from "../api"; // Ensure correct API import
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-
-    console.log("useauth called");
-    
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  // ✅ Fix: Wrap `logout` in useCallback to prevent unnecessary re-renders
-  const logout = useCallback(() => {
+  console.log("✅ AuthProvider initialized"); // Debugging log
+
+  // ✅ Function to fetch user details from the backend
+  const fetchUserData = async (uid) => {
+    try {
+      const response = await authUserInfo(uid); // ✅ Await API call
+      setUser(response.data);
+      // console.log("✅ User data fetched:", response.data);
+
+      
+      
+    } catch (error) {
+      console.error("❌ Error fetching user data:", error);
+      handleLogout();
+    }
+  };
+
+  // ✅ Optimized Logout Function (useCallback to prevent re-renders)
+  const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     setUser(null);
-    navigate("/login");
-  }, [navigate]); // ✅ Depend only on `navigate`
+    // navigate("/login");
+  }, []);
 
+  // ✅ useEffect - Runs ONLY ONCE ([]) to prevent infinite re-renders
   useEffect(() => {
+    console.log("🔄 useEffect in AuthProvider triggered");
+
     const token = localStorage.getItem("token");
+    if (!token) return;
 
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        console.log(decoded);
+    try {
+      const decoded = jwtDecode(token);
+      console.log("🔍 Decoded token:", decoded);
+
+      if (decoded.exp * 1000 < Date.now()) {
+        console.warn("⏳ Token expired. Logging out...");
+        handleLogout();
+      } else {
+        // setUser(decoded); 
+        console.log(decoded , "at auth provider");
+        // console.log(user ," trying to print token");
         
-        if (decoded.exp * 1000 < Date.now()) {
-          logout(); // ✅ Now logout is defined before this useEffect runs
-        } else {
-          setUser(decoded);
-        }
-      } catch (error) {
-        console.error("Invalid token:", error);
-        logout();
+        // ✅ Set user state with decoded token data
+        // fetchUserData(decoded.uid); // ✅ Fetch user details from backend
       }
-    } else {
-    //   logout();
+    } catch (error) {
+      console.error("❌ Invalid token:", error);
+      handleLogout();
     }
-  }, [logout]); // ✅ Now logout is stable & does not cause unnecessary re-renders
+  }, []); // ✅ Runs only once on mount
 
-  return <AuthContext.Provider value={{ user, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, handleLogout ,fetchUserData }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => useContext(AuthContext);

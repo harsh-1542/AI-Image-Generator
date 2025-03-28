@@ -6,6 +6,7 @@ import PostRouter from './routes/Posts.js';
 import UserRouter from './routes/User.js';
 import ganerateImageRouter from './routes/GenerateImage.js';
 import { authMiddleware } from './middleware/auth.js';
+import { getUserById } from './controllers/User.js';
 
 // heeloo
 dotenv.config();
@@ -29,6 +30,8 @@ app.use((err,req, res, next) =>{
 app.use("/api",authMiddleware);
 
 app.use('/api/post',PostRouter);
+
+app.use('/api/user/:id', getUserById);
 app.use('/', UserRouter);
 app.use('/post/', PostRouter);
 app.use('/api/generateimage',ganerateImageRouter);
