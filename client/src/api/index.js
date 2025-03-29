@@ -2,19 +2,20 @@ import axios from "axios";
 
 
 // const weburl = "https://8080-shreedattpa-aiimagegene-0vu8igimawn.ws-us117.gitpod.io/api/";
-const localurl= "http://localhost:8080/"
-// const WebUrl= "https://ai-image-generator-ey71.onrender.com/"
+// const localurl= "http://localhost:8080/"
+const WebUrl= "https://ai-image-generator-ey71.onrender.com/"
 // http://localhost:8080/api/
+
 
 // Public API (No token)
 export const PublicAPI = axios.create({
-  baseURL: localurl,
+  baseURL: WebUrl,
   headers: { "Content-Type": "application/json" },
 });
 
 // Private API (Sends token)
 export const PrivateAPI = axios.create({
-  baseURL: localurl,
+  baseURL: WebUrl,
   headers: { "Content-Type": "application/json" }
 });
 
